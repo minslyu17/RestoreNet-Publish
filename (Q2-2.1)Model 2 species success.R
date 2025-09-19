@@ -15,7 +15,7 @@ library(ggplot2)
 
 # data preparation
 library(readxl)
-FullDatawithZeros10_7_2024 <- read_excel("2024/Data for models/FullDatawithZeros10_7_2024.xlsx")
+FullDatawithZeros10_7_2024 <- read_excel("FullDatawithZeros10_7_2024.xlsx")
 Model1All <- FullDatawithZeros10_7_2024
 Model1All <- within(Model1All, 
                     {
@@ -148,7 +148,7 @@ library(dpylr)
 #### spring
 # Average Number of Seedlings in the Post-Drought Fall by Species and Surface Treatments
 Model2_b1_filtered_spring_summary <- Model2_b1_filtered_spring %>%
-  group_by(Species, SeedTreat, MAT95, SoilSurfaceTreat) %>%
+  group_by(Species, SeedTreat, MAT95, Site) %>%
   summarise(mean_count = mean(Seedling_Count, na.rm = TRUE),
             SE_count = sd(Seedling_Count, na.rm = TRUE) / sqrt(n()))
 
@@ -157,7 +157,7 @@ plot2_b1_spring <- ggplot(Model2_b1_filtered_spring_summary, aes(x = reorder(Spe
   geom_errorbar(aes(ymin = mean_count - SE_count, ymax = mean_count + SE_count), 
                 position = position_dodge(0.7), width = 0.2) +
   scale_fill_gradient(low="blue", high="red") +
-  facet_grid(SoilSurfaceTreat ~ .) +
+  facet_grid(Site ~ .) +
   labs(y = "Seeded speceis density (#/subplot)",
        x = "Species code",
        fill = "MAT95 (°C)") +

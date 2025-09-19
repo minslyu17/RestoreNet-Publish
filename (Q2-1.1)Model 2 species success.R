@@ -15,7 +15,7 @@ library(ggplot2)
 
 # data preparation
 library(readxl)
-FullDatawithZeros10_7_2024 <- read_excel("2024/Data for models/FullDatawithZeros10_7_2024.xlsx")
+FullDatawithZeros10_7_2024 <- read_excel("FullDatawithZeros10_7_2024.xlsx")
 Model1All <- FullDatawithZeros10_7_2024
 summary(Model1All)
 

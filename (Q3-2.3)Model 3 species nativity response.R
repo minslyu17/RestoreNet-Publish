@@ -17,7 +17,7 @@ library(ggplot2)
 
 # data preparation
 library(readxl)
-WholePlotCoverSeededUnseeded <- read_excel("2024/Data for models/WholePlotCoverSeededUnseeded.xlsx")
+WholePlotCoverSeededUnseeded <- read_excel("WholePlotCoverSeededUnseeded.xlsx")
 Model3All <- WholePlotCoverSeededUnseeded
 Model3All <- within(Model3All, 
                     {

@@ -130,7 +130,7 @@ library(ggplot2)
 #### spring
 # Average Whole Plot Coverage in the Post-Drought Springs by Species, Site and Surface Treatments
 Model2_b3_filtered_spring_summary <- Model2_b2_filtered_spring %>%
-  group_by(Site, Species, MAT95, SoilSurfaceTreat) %>%
+  group_by(Site, Species, MAT95) %>%
   summarise(mean_cover = mean(Whole_plot_cover, na.rm = TRUE),
             SE_cover = sd(Whole_plot_cover, na.rm = TRUE) / sqrt(n()))
 
@@ -138,7 +138,7 @@ plot2_b3_spring <- ggplot(Model2_b3_filtered_spring_summary, aes(x = reorder(Spe
   geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
   geom_errorbar(aes(ymin = mean_cover - SE_cover, ymax = mean_cover + SE_cover), 
                 position = position_dodge(0.7), width = 0.2) +
-  facet_grid(SoilSurfaceTreat ~ Site) +
+  facet_grid(Site ~ .) +
   scale_fill_gradient(low="blue", high="red") +
   labs(y = "Whole plot cover (%)",
        x = "Species code",
