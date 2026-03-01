@@ -97,33 +97,60 @@ library(ggplot2)
 #### spring
 # Averaged Total Plant Coverage of the Post-Drought Spring Seasons by Site and Surface Treatments
 Model3_b3_filtered_spring_summary_TPC <- Model3_b3_filtered_spring %>%
-  group_by(Site, seasonyear) %>%
+  group_by(Site, seasonyear, SoilSurfaceTreat) %>%
   summarise(mean_TPC = mean(Total_Plant_Cover, na.rm = TRUE),
             SE_TPC = sd(Total_Plant_Cover, na.rm = TRUE) / sqrt(n()))
 
-plot3_b3_spring_TPC = ggplot(Model3_b3_filtered_spring_summary_TPC, aes(x = Site, y = mean_TPC)) + 
-  geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
+library(ggpattern)
+treatment_levels <- c("ConMod", "Control","Mulch", "Pits", "Seed only")
+pattern_values <- c("none", "stripe", "crosshatch", "circle", "wave")  
+fill_values <- c("gray90", "gray75", "gray60", "gray45", "gray25")
+
+plot3_b3_spring_TPC = ggplot(Model3_b3_filtered_spring_summary_TPC, 
+  aes(x = Site, y = mean_TPC, fill = SoilSurfaceTreat, pattern = SoilSurfaceTreat)) + 
+  geom_bar_pattern(stat = "identity", position = position_dodge(0.7), width = 0.6,color = "black",  
+                   pattern_fill = "black", pattern_angle = 45, pattern_density = 0.1,  pattern_spacing = 0.05) +  
+  scale_pattern_manual(values = setNames(pattern_values, treatment_levels)) +
+  scale_fill_manual(values = setNames(fill_values, treatment_levels)) +
   geom_errorbar(aes(ymin = mean_TPC - SE_TPC, ymax = mean_TPC + SE_TPC), 
                 position = position_dodge(0.7), width = 0.2) +
-  facet_grid(. ~ seasonyear) +
-  labs(y = "Total plant cover (%)",
-       x = "Site") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA))
+  facet_grid(. ~ seasonyear, labeller = labeller(
+             seasonyear = c("SPRING2021" = "spring 2021","SPRING2022" = "spring 2022"))) +
+  labs(y = "Unseeded total plant cover (%)",
+       x = "Site",
+       fill = "Surface Treatments",
+       pattern = "Surface Treatments") +
+  theme_test()
+
 
 #### fall
 # Averaged Total Plant Coverage of the Post-Drought Fall Season by Site and Surface Treatments
 Model3_b3_filtered_fall_summary_TPC <- Model3_b3_filtered_fall %>%
-  group_by(Site) %>%
+  group_by(Site, SoilSurfaceTreat) %>%
   summarise(mean_TPC = mean(Total_Plant_Cover, na.rm = TRUE),
             SE_TPC = sd(Total_Plant_Cover, na.rm = TRUE) / sqrt(n()))
 
-plot3_b3_fall_TPC = ggplot(Model3_b3_filtered_fall_summary_TPC, aes(x = Site, y = mean_TPC)) + 
-  geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
+library(ggpattern)
+treatment_levels <- c("ConMod", "Control","Mulch", "Pits", "Seed only")
+pattern_values <- c("none", "stripe", "crosshatch", "circle", "wave")  
+fill_values <- c("gray90", "gray75", "gray60", "gray45", "gray25")
+
+plot3_b3_fall_TPC = ggplot(Model3_b3_filtered_fall_summary_TPC, 
+  aes(x = Site, y = mean_TPC, fill = SoilSurfaceTreat, pattern = SoilSurfaceTreat)) + 
+  geom_bar_pattern(stat = "identity", position = position_dodge(0.7), width = 0.6,color = "black",  
+                   pattern_fill = "black", pattern_angle = 45, pattern_density = 0.1,  pattern_spacing = 0.05) +  
+  scale_pattern_manual(values = setNames(pattern_values, treatment_levels)) +
+  scale_fill_manual(values = setNames(fill_values, treatment_levels)) +
   geom_errorbar(aes(ymin = mean_TPC - SE_TPC, ymax = mean_TPC + SE_TPC), 
                 position = position_dodge(0.7), width = 0.2) +
-  labs(y = "Total plant cover (%)",
-       x = "Site") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-        strip.text.y = element_text(angle = -90))
+  labs(y = "Unseeded total plant cover (%)",
+       x = "Site",
+       fill = "Surface Treatments",
+       pattern = "Surface Treatments") +
+  annotate("text", x = -Inf, y = 105,
+           label = "atop('  Site: ' ~ italic(p) < 0.001)",
+           parse = TRUE, hjust = 0, vjust = 1, size = 2) +
+  annotate("text", x = -Inf, y = 100,
+           label = "atop('  Surface: ' ~ italic(p) == 0.650)",
+           parse = TRUE, hjust = 0, vjust = 1, size = 2) +
+  theme_test()

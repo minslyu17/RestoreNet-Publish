@@ -180,32 +180,49 @@ Model3_b1_filtered_spring_summary <- Model3_b1_filtered_spring %>%
   summarise(mean_sum_count = mean(sum_count, na.rm = TRUE),
             SE_sum_count = sd(sum_count, na.rm = TRUE) / sqrt(n()))
 
-plot3_b1_spring = ggplot(Model3_b1_filtered_spring_summary, aes(x = Site, y = mean_sum_count, fill = SoilSurfaceTreat)) +
-  geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
+library(ggpattern)
+treatment_levels <- c("ConMod", "Control","Mulch", "Pits", "Seed only")
+pattern_values <- c("none", "stripe", "crosshatch", "circle", "wave")  
+fill_values <- c("gray90", "gray75", "gray60", "gray45", "gray25")
+
+plot3_b1_spring = ggplot(Model3_b1_filtered_spring_summary, 
+  aes(x = Site, y = mean_sum_count, fill = SoilSurfaceTreat, pattern = SoilSurfaceTreat)) +
+  geom_bar_pattern(stat = "identity", position = position_dodge(0.7), width = 0.6,color = "black",  
+                   pattern_fill = "black", pattern_angle = 45, pattern_density = 0.1, pattern_spacing = 0.05) +  
+  scale_pattern_manual(values = setNames(pattern_values, treatment_levels)) +
+  scale_fill_manual(values = setNames(fill_values, treatment_levels)) +
+  guides(fill = "none", pattern = guide_legend(override.aes = list(fill = fill_values, pattern = pattern_values))) +
   geom_errorbar(aes(ymin = mean_sum_count - SE_sum_count, ymax = mean_sum_count + SE_sum_count), 
                 position = position_dodge(0.7), width = 0.2) +
   facet_grid(Nativity ~ seasonyear) +
   labs(y = "Unseeded speceis density (#/subplot)",
        x = "Site",
-       fill = "Surface treatments") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-        strip.text.y = element_text(angle = -90))
+       fill = "Surface treatments",
+       pattern = "Surface Treatments") +
+  theme_test()
 
 #### fall
 # Averaged Total Seedling Numbers of Unseeded Species in the Post-drought Fall Season by Site and Surface Treatments
 Model3_b1_filtered_fall_summary <- Model3_b1_filtered_fall %>%
-  group_by(Site, Nativity) %>%
+  group_by(Site, Nativity, SoilSurfaceTreat) %>%
   summarise(mean_sum_count = mean(sum_count, na.rm = TRUE),
             SE_sum_count = sd(sum_count, na.rm = TRUE) / sqrt(n()))
 
-plot3_b1_fall = ggplot(Model3_b1_filtered_fall_summary, aes(x = Site, y = mean_sum_count)) +
-  geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
+plot3_b1_fall = ggplot(Model3_b1_filtered_fall_summary, aes(x = Site, y = mean_sum_count, fill = SoilSurfaceTreat, pattern = SoilSurfaceTreat)) +
+  geom_bar_pattern(stat = "identity", position = position_dodge(0.7), width = 0.6,color = "black",                     pattern_fill = "black", 
+                   pattern_angle = 45,
+                   pattern_density = 0.1,                                  
+                   pattern_spacing = 0.05) +  
+  scale_pattern_manual(values = setNames(pattern_values, treatment_levels)) +
+  scale_fill_manual(values = setNames(fill_values, treatment_levels)) +
+  guides(fill = "none", pattern = guide_legend(override.aes = list(
+    fill = fill_values,
+    pattern = pattern_values))) +
   geom_errorbar(aes(ymin = mean_sum_count - SE_sum_count, ymax = mean_sum_count + SE_sum_count), 
                 position = position_dodge(0.7), width = 0.2) +
-  facet_grid(. ~ Nativity) +
+  facet_grid(Nativity ~ .) +
   labs(y = "Unseeded speceis density (#/subplot)",
-       x = "Site") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-        strip.text.y = element_text(angle = -90))
+       x = "Site",
+       fill = "Surface treatments",
+       pattern = "Surface Treatments") +
+  theme_test() 
