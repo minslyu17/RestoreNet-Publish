@@ -115,11 +115,9 @@ plot2_a1 <- ggplot(Model2_a1_filtered_summary, aes(x = reorder(Species, MAT95), 
   geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
   geom_errorbar(aes(ymin = mean_count - SE_count, ymax = mean_count + SE_count), 
                 position = position_dodge(0.7), width = 0.2) +
-  scale_fill_gradient(low="blue", high="red") +
+  scale_fill_gradient(low="gray80", high="gray20") +
   facet_grid(Site ~ .) +
   labs(y = "Seeded species density (#/subplot)",
        x = "Species code",
        fill = "MAT95 (°C)" ) +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-        strip.text.y = element_text(angle = 0))
+  theme_test() 

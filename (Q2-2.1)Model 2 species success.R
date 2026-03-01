@@ -156,14 +156,13 @@ plot2_b1_spring <- ggplot(Model2_b1_filtered_spring_summary, aes(x = reorder(Spe
   geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
   geom_errorbar(aes(ymin = mean_count - SE_count, ymax = mean_count + SE_count), 
                 position = position_dodge(0.7), width = 0.2) +
-  scale_fill_gradient(low="blue", high="red") +
+  scale_fill_gradient(low="gray80", high="gray20") +
   facet_grid(Site ~ .) +
   labs(y = "Seeded speceis density (#/subplot)",
        x = "Species code",
        fill = "MAT95 (°C)") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-        strip.text.y = element_text(angle = 0))
+  theme_test() 
+
 
 #### fall
 # Average Number of Seedlings in the Post-Drought Springs by Species and Site
@@ -176,11 +175,9 @@ plot2_b1_fall <- ggplot(Model2_b1_filtered_fall_summary, aes(x = reorder(Species
   geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
   geom_errorbar(aes(ymin = mean_count - SE_count, ymax = mean_count + SE_count), 
                 position = position_dodge(0.7), width = 0.2) +
-  scale_fill_gradient(low="blue", high="red") +
+  scale_fill_gradient(low="gray80", high="gray20") +
   facet_grid(Site ~ .) +
   labs(y = "Seeded species density (#/subplot)",
        x = "Species code",
        fill = "MAT95 (°C)") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-        strip.text.y = element_text(angle = 0))
+  theme_test()

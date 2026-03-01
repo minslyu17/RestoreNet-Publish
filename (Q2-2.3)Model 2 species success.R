@@ -139,13 +139,12 @@ plot2_b3_spring <- ggplot(Model2_b3_filtered_spring_summary, aes(x = reorder(Spe
   geom_errorbar(aes(ymin = mean_cover - SE_cover, ymax = mean_cover + SE_cover), 
                 position = position_dodge(0.7), width = 0.2) +
   facet_grid(Site ~ .) +
-  scale_fill_gradient(low="blue", high="red") +
+  scale_fill_gradient(low="gray80", high="gray20") +
   labs(y = "Whole plot cover (%)",
        x = "Species code",
        fill = "MAT95 (°C)") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-        strip.text.y = element_text(angle = 0))
+  theme_test()
+
 
 #### fall
 # Average Whole Plot Coverage in the Post-Drought Fall by Species and Site
@@ -159,10 +158,8 @@ plot2_b3_fall <- ggplot(Model2_b3_filtered_fall_summary, aes(x = reorder(Species
   geom_errorbar(aes(ymin = mean_cover - SE_cover, ymax = mean_cover + SE_cover), 
                 position = position_dodge(0.7), width = 0.2) +
   facet_grid(Site ~ .) +
-  scale_fill_gradient(low="blue", high="red") +
+  scale_fill_gradient(low="gray80", high="gray20") +
   labs(y = "Whole plot cover (%)",
        x = "Species code",
        fill = "MAT95 (°C)") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-        strip.text.y = element_text(angle = 0))
+  theme_test()
