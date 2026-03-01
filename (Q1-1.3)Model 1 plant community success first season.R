@@ -61,16 +61,30 @@ print(pairwise_IRRs)
 # generalize plot about Average Whole Plot Coverage in the Pre-Drought Season by Seed Treatments
 library(ggplot2)
 Model1_a3_filtered_summary <- Model1_a2_filtered %>%
-  group_by(Seed_Mix) %>%
+  group_by(Seed_Mix, Treatment) %>%
   summarise(mean_cover = mean(Whole_plot_cover, na.rm = TRUE),
             SE_cover = sd(Whole_plot_cover, na.rm = TRUE) / sqrt(n()))
 
-plot1_a3 = ggplot(Model1_a3_filtered_summary, aes(x = Seed_Mix, y = mean_cover)) +
-  geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
+library(ggpattern)
+treatment_levels <- c("ConMod", "Mulch", "Pits", "Seed only")
+pattern_values <- c("none", "stripe", "crosshatch", "circle")  
+fill_values <- c("gray90", "gray70", "gray50", "gray30") 
+
+plot1_a3 = ggplot(Model1_a3_filtered_summary, aes(x = Seed_Mix, y = mean_cover, fill = Treatment, pattern = Treatment)) +
+  geom_bar_pattern(stat = "identity", position = position_dodge(0.7), width = 0.6,color = "black",                       pattern_fill = "black", pattern_angle = 45, pattern_density = 0.1, 
+                   pattern_spacing = 0.05) +  
+  scale_pattern_manual(values = setNames(pattern_values, treatment_levels)) +
+  scale_fill_manual(values = setNames(fill_values, treatment_levels)) +
   geom_errorbar(aes(ymin = mean_cover - SE_cover, ymax = mean_cover + SE_cover), 
                 position = position_dodge(0.7), width = 0.2) +
-  labs(y = "Whole plot cover (%)",
-       x = "Seed Treatments") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-    strip.text.y = element_text(angle = 0))
+  labs(y = "Seeded species cover (%)",
+       x = "Seed Mixes",
+       fill = "Surface Treatments",
+       pattern = "Surface Treatments") +
+  annotate("text", x = -Inf, y = 3.6,
+           label = "atop('   Seed Mixes: ' ~ italic(p) < 0.001)",
+           parse = TRUE, hjust = 0, vjust = 1, size = 2) +
+  annotate("text", x = -Inf, y = 3.4,
+           label = "atop('   Surface Treatments: ' ~ italic(p) == 0.961)",
+           parse = TRUE, hjust = 0, vjust = 1, size = 2) +
+  theme_test() 

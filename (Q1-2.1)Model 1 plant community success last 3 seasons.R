@@ -154,14 +154,22 @@ Model1_b1_filtered_spring_summary <- Model1_b1_filtered_spring %>%
   summarise(mean_count = mean(Seedling_Count, na.rm = TRUE),
             SE_count = sd(Seedling_Count, na.rm = TRUE) / sqrt(n()))
 
-plot1_b1_Spring <- ggplot(Model1_b1_filtered_spring_summary, aes(x = Seed_Mix, y = mean_count, fill = Treatment)) +
-  geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
-  geom_errorbar(aes(ymin = mean_count - SE_count, ymax = mean_count + SE_count), 
+library(ggpattern)
+treatment_levels <- c("ConMod", "Mulch", "Pits", "Seed only")
+pattern_values <- c("none", "stripe", "crosshatch", "circle")  
+fill_values <- c("gray90", "gray70", "gray50", "gray30")       
+
+plot1_b1_Spring <- ggplot(Model1_b1_filtered_spring_summary, 
+  aes(x = Seed_Mix, y = mean_count, fill = Treatment, pattern = Treatment)) +
+  geom_bar_pattern(stat = "identity", position = position_dodge(0.7), width = 0.6,color = "black", 
+                   pattern_fill = "black", pattern_angle = 45, pattern_density = 0.1, pattern_spacing = 0.05) +
+  scale_pattern_manual(values = setNames(pattern_values, treatment_levels)) +
+  scale_fill_manual(values = setNames(fill_values, treatment_levels)) +
+  geom_errorbar(aes(ymin = mean_count - SE_count, ymax = mean_count + SE_count),
                 position = position_dodge(0.7), width = 0.2) +
-  facet_grid(seasonyear ~ .) +
-  labs(y = "Seeded speceis density (#/subplot)",
-       x = "Seed Treatments",
-       fill = "Surface Treatments") +
-  theme_minimal() +
-  theme(strip.background = element_rect(fill = "lightgrey", color = NA),
-        strip.text.y = element_text(angle = 0))
+  facet_grid(seasonyear ~ .) +   
+  labs(y = "Seeded species density (#/subplot)",
+       x = "Seed Mixes",  
+       fill = "Surface Treatments",
+       pattern = "Surface Treatments") +
+  theme_test()
